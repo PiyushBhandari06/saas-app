@@ -19,33 +19,46 @@ const SubjectFilter = () => {
 
     const [subject, setSubject] = useState(query);
 
+    // Update local state when URL changes
     useEffect(() => {
+        const currentSubject = searchParams.get("subject") || "";
+        setSubject(currentSubject);
+    }, [searchParams]);
+
+    // Update URL when subject changes
+    useEffect(() => {
+        // Don't update URL on initial load if subject is empty
+        if (subject === query && !subject) return;
+
         let newUrl = "";
-        if (subject === "all") {
+        if (subject === "all" || subject === "") {
             newUrl = removeKeysFromUrlQuery({
                 params: searchParams.toString(),
                 keysToRemove: ["subject"],
             });
-        } else {
+        } else if (subject) {
             newUrl = formUrlQuery({
                 params: searchParams.toString(),
                 key: "subject",
                 value: subject,
             });
         }
-        router.push(newUrl, { scroll: false });
-    }, [subject]);
+
+        if (newUrl) {
+            router.push(newUrl, { scroll: false });
+        }
+    }, [subject, searchParams, router]);
 
     return (
-        <Select onValueChange={setSubject} value={subject}>
+        <Select onValueChange={setSubject} value={subject || "all"}>
             <SelectTrigger className="input capitalize">
                 <SelectValue placeholder="Subject" />
             </SelectTrigger>
             <SelectContent>
                 <SelectItem value="all">All subjects</SelectItem>
-                {subjects.map((subject) => (
-                    <SelectItem key={subject} value={subject} className="capitalize">
-                        {subject}
+                {subjects.map((subjectItem) => (
+                    <SelectItem key={subjectItem} value={subjectItem} className="capitalize">
+                        {subjectItem}
                     </SelectItem>
                 ))}
             </SelectContent>

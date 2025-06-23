@@ -11,7 +11,7 @@ const SearchInput = () => {
     const searchParams = useSearchParams();
     const query = searchParams.get('topic') || '';
 
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(query);
 
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
@@ -33,7 +33,9 @@ const SearchInput = () => {
                     router.push(newUrl, { scroll: false });
                 }
             }
-        }, 1000)
+        }, 1500);
+
+        return () => clearTimeout(delayDebounceFn);
     }, [searchQuery, router, searchParams, pathname]);
 
     return (
