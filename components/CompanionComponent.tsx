@@ -6,6 +6,7 @@ import Lottie, { LottieRefCurrentProps } from 'lottie-react';
 import Image from 'next/image';
 import React, { useState, useEffect, useRef } from 'react'
 import soundwaves from '@/constants/soundwaves.json';
+import { addToSessionHistory } from '@/lib/actions/companion.action';
 
 enum CallStatus {
     INACTIVE = 'INACTIVE',
@@ -14,7 +15,7 @@ enum CallStatus {
     FINISHED = 'FINISHED',
 }
 
-const CompanionComponent = ({subject, topic, name, userName, userImage, style, voice}:CompanionComponentProps) => {
+const CompanionComponent = ({companionId, subject, topic, name, userName, userImage, style, voice}:CompanionComponentProps) => {
 
     const [callStatus, setCallStatus] = useState<CallStatus>(CallStatus.INACTIVE);
     const [isSpeaking, setIsSpeaking] = useState(false);
@@ -38,8 +39,10 @@ const CompanionComponent = ({subject, topic, name, userName, userImage, style, v
     useEffect(() => {
         const onCallStart = () => setCallStatus(CallStatus.ACTIVE);
 
-        const onCallEnd = () => setCallStatus(CallStatus.FINISHED);
-
+        const onCallEnd = () => {
+            setCallStatus(CallStatus.FINISHED);
+            addToSessionHistory (companionId)
+        }
         const onMessage = (Message: Message) => {
             if(Message.type === 'transcript' && Message.transcriptType === 'final'){
                 const newMessage = { role : Message.role, content: Message.transcript}
@@ -163,10 +166,10 @@ const CompanionComponent = ({subject, topic, name, userName, userImage, style, v
                     onClick = {callStatus===CallStatus.ACTIVE ? handleDisconnect : handleCall}>
                         {
                         callStatus==CallStatus.ACTIVE
-                        ? 'End Call'
+                        ? 'End Session'
                         : callStatus===CallStatus.CONNECTING
                             ? 'Connecting...'
-                            : 'Start Call'
+                            : 'Start Session'
                         }
 
                 </button>
