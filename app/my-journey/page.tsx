@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion"
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { addToSessionHistory, getuserCompanions, getuserSessions } from "@/lib/actions/companion.action";
+import { addToSessionHistory, getuserCompanions, getuserSessions } from "@/lib/actions/companion.actions";
 import Image from "next/image";
 import CompanionsList from "@/components/CompanionsList";
 

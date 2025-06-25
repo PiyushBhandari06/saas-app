@@ -1,7 +1,7 @@
 import Companioncard from "@/components/Companioncard";
 import SearchInput from "@/components/SearchInput";
 import Subjectfilter from "@/components/Subjectfilter";
-import { getAllCompanions } from "@/lib/actions/companion.action";
+import { getAllCompanions } from "@/lib/actions/companion.actions";
 import { getSubjectColor } from "@/lib/utils";
 
 

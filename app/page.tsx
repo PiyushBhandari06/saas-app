@@ -2,7 +2,7 @@ import Companioncard from '@/components/Companioncard'
 import CompanionsList from '@/components/CompanionsList'
 import CTA from '@/components/CTA'
 import { recentSessions } from "@/constants/index"
-import { getAllCompanions, getRecentSessions } from '@/lib/actions/companion.action'
+import { getAllCompanions, getRecentSessions } from '@/lib/actions/companion.actions'
 import { getSubjectColor } from '@/lib/utils'
 
 const Page = async () => {

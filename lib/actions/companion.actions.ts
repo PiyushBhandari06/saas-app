@@ -1,6 +1,6 @@
 'use server';
 
-import { auth } from "@clerk/nextjs/server"
+import { auth } from "@clerk/nextjs/server";
 import { createSupabaseClient } from "../supabase";
 
 export const createCompanion = async (FormData: CreateCompanion) => {
@@ -80,7 +80,14 @@ export const getRecentSessions = async(limit = 10)=> {
 
     if(error) throw new Error(error.message);
 
-    return data.map(({companions})=>companions);
+    const companions = data.map(({companions})=>companions).filter(Boolean);
+
+    // Remove duplicates by companion ID
+    const uniqueCompanions = companions.filter((companion: any, index, self) =>
+        companion && index === self.findIndex((c: any) => c && c.id === companion.id)
+    );
+
+    return uniqueCompanions;
 
 }
 
@@ -96,7 +103,14 @@ export const getuserSessions = async(userId : string, limit = 10)=> {
 
     if(error) throw new Error(error.message);
 
-    return data.map(({companions})=>companions);
+    const companions = data.map(({companions})=>companions).filter(Boolean);
+
+    // Remove duplicates by companion ID
+    const uniqueCompanions = companions.filter((companion: any, index, self) =>
+        companion && index === self.findIndex((c: any) => c && c.id === companion.id)
+    );
+
+    return uniqueCompanions;
 
 }
 
@@ -113,4 +127,3 @@ export const getuserCompanions = async(userId : string,)=> {
     return data;
 
 }
-
