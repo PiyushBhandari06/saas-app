@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/accordion"
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { addToSessionHistory, getuserCompanions, getuserSessions } from "@/lib/actions/companion.actions";
+import { getuserCompanions, getuserSessions,getBookmarkedCompanions } from "@/lib/actions/companion.actions";
 import Image from "next/image";
 import CompanionsList from "@/components/CompanionsList";
 
@@ -14,10 +14,11 @@ const Profile = async () => {
 
   const user = await currentUser();
 
-  if(!user) redirect('/sign-in');
+  if(!user) redirect("/sign-in");
 
   const companions = await getuserCompanions(user.id);
   const SessionHistory = await getuserSessions(user.id);
+  const bookmarkedCompanions = await getBookmarkedCompanions(user.id);
 
   return (
     <main className='max-lg : w-3/4'>
@@ -42,7 +43,7 @@ const Profile = async () => {
           <div className="border border-black rounded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image src="/icons/check.svg" alt="checkmark" width={22} height={22}  />
-              <p className="text-3xl font-bold">{SessionHistory.length}</p>
+              <p className="text-2xl font-bold">{SessionHistory.length}</p>
             </div>
             <div>
               Lessons Completed
@@ -52,7 +53,7 @@ const Profile = async () => {
           <div className="border border-black rounded-lg p-3 gap-2 flex flex-col h-fit">
             <div className="flex gap-2 items-center">
               <Image src="/icons/cap.svg" alt="cap" width={22} height={22}  />
-              <p className="text-3xl font-bold">{companions.length}</p>
+              <p className="text-2xl font-bold">{companions.length}</p>
             </div>
             <div>
               Companions Created
@@ -63,6 +64,18 @@ const Profile = async () => {
         </div>
       </section>
         <Accordion type="multiple">
+        <AccordionItem value="bookmarks">
+          <AccordionTrigger className="text-2xl font-bold">
+            Bookmarked Companions {`(${bookmarkedCompanions.length})`}
+          </AccordionTrigger>
+          <AccordionContent>
+            <CompanionsList
+              companions={bookmarkedCompanions}
+              title="Bookmarked Companions"
+            />
+          </AccordionContent>
+        </AccordionItem>
+
           <AccordionItem value="recent">
             <AccordionTrigger className="text-2xl font-bold">Recent Sessions</AccordionTrigger>
             <AccordionContent>
