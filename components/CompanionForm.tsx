@@ -24,7 +24,6 @@ import { subjects } from "@/constants"
 import { Textarea } from "./ui/textarea"
 import { createCompanion } from "@/lib/actions/companion.actions"
 import { redirect } from "next/navigation"
-import { log } from "console"
 
 
 const formSchema = z.object({
